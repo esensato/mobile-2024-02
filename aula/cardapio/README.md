@@ -1,5 +1,5 @@
-Executar:
+Executar dentro da pasta cardapio:
 
 `npm install`
 
-dentro da pasta cardapio.
+`cordova platform add android`
