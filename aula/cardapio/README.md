@@ -1,5 +1,5 @@
 Executar:
 
-`npm run install`
+`npm install`
 
 dentro da pasta cardapio.
