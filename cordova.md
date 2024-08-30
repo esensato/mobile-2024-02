@@ -472,7 +472,10 @@ cordova.plugin.http.post('https://pedidos-pizzaria.glitch.me/', {
 
     .preview {
         flex: 5;
-        border: solid
+        border: solid;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
     }
 
     .botao {

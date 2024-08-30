@@ -5,6 +5,8 @@ let divPreco;
 let divImagem;
 let cardapio;
 let pizzaAtual = 0;
+let qtde;
+let endereco;
 
 function onDeviceReady() {
 
@@ -13,6 +15,10 @@ function onDeviceReady() {
     divImagem = document.getElementById("imagem");
     divPizza = document.getElementById("pizza");
     divPreco = document.getElementById("preco");
+    // quantidade de pizzas (select)
+    qtde = document.getElementById("qtde");
+    // endereco de entrega (text)
+    endereco = document.getElementById("endereco");
 
     const esquerda = document.getElementById("esquerda");
     const direita = document.getElementById("direita");
@@ -20,8 +26,25 @@ function onDeviceReady() {
     esquerda.addEventListener('click', esquerdaOnClick, false);
     direita.addEventListener('click', direitaOnClick, false);
 
+    const enviar = document.getElementById("enviar");
+    enviar.addEventListener('click', enviarOnClick, false);
     carregarCardapio();
 
+}
+
+function enviarOnClick() {
+    // determina que o corpo da requisição POST será um objeto JSON
+    cordova.plugin.http.setDataSerializer('json');
+
+    cordova.plugin.http.post('https://pedidos-pizzaria.glitch.me', {
+        pizza: cardapio[pizzaAtual].pizza,
+        quantidade: qtde.value,
+        endereco: endereco.value
+    }, {}, function (response) {
+        alert('Pedido Enviado!');
+    }, function (response) {
+        alert(response.error);
+    });
 }
 
 function carregarCardapio() {
