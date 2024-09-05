@@ -11,7 +11,7 @@
 
     <platform name="android">
         <splash src="res/screen/android/pizza.png"/>
-        <preference name = "SplashScreenDelay" value = "3000" />
+        <preference name = "SplashScreenDelay" value = "5000" />
         <preference name = "AndroidWindowSplashScreenAnimatedIcon" value = "res/screen/android/pizza.png" />
     </platform>
 
