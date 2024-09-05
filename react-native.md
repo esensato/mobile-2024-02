@@ -9,6 +9,7 @@
 - Lógica de negócio permanece em *JavaScript*
 
 ### Criação do Projeto
+- No caso específico de Mac digitar no terminal: `export NODE_OPTIONS=--max-old-space-size=4096`
 - Criar o projeto (`npx create-expo-app ControleGastos`)
     ```
     cd ControleGastos
