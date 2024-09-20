@@ -425,7 +425,7 @@
 - Importar o componente `import DragList, { DragListRenderItemInfo } from 'react-native-draglist';`
 - Criar uma função para formatar os itens da lista
     ```javascript
-    const renderItem = (info) => {
+    const renderItem = (info: any) => {
       const { item, onDragStart, onDragEnd, isActive } = info;
   
       return (
@@ -441,7 +441,7 @@
     ```
 - Criar uma função para reorganizar os componentes da lista quando os itens forem reposicionados
     ```javascript
-    const onReordered = async (fromIndex, toIndex) => {
+    const onReordered = async (fromIndex: number, toIndex: number) => {
     
       console.log(fromIndex, toIndex)
       const copy = [...gastos]; // Don't modify react data in-place
