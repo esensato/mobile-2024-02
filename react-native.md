@@ -10,9 +10,9 @@
 
 ### Criação do Projeto
 - No caso específico de Mac digitar no terminal: `export NODE_OPTIONS=--max-old-space-size=4096`
-- Criar o projeto (`npx create-expo-app ControleGastos`)
+- Criar o projeto (`npx create-expo-app controlegastos`)
     ```
-    cd ControleGastos
+    cd controlegastos
     npm run reset-project
     npm run android
     ```
@@ -598,7 +598,7 @@
   ```javascript
   export default function App() {
 
-    return (<NavigationContainer>
+    return (<NavigationContainer independent={true}>
       <TelaPrincipal />
     </NavigationContainer>)
 
@@ -615,7 +615,7 @@
   ```
 - Informar as telas que serão controladas pelo `Stack Navigator`
   ```javascript
-  return (<NavigationContainer>
+  return (<NavigationContainer independent={true}>
     <Stack.Navigator>
       <Stack.Screen name="principal" component={TelaPrincipal}/>
     </Stack.Navigator>
@@ -639,83 +639,41 @@
 ***
 ### Persistência com SQLite
 - É possível persistir dados localmente tanto em Android quando em iOS utilizando o banco de dados relacional **SQLite**
-
-  `expo install expo-sqlite`
-- Criar um arquivo `BancoDados.js`
+- Uma referência completa pode ser encontrada [aqui](https://docs.expo.dev/versions/latest/sdk/sqlite/)
+  `npx expo install expo-sqlite`
+- Criar um arquivo `banco-dados.tsx`
   ```javascript
-  import * as SQLite from 'expo-sqlite';
+    import * as SQLite from 'expo-sqlite';
+    
+    export const bcodados = SQLite.openDatabaseSync('gastos.db');
+    
+    export const iniciar = () => {
+    
+        bcodados.execSync('CREATE TABLE IF NOT EXISTS gastos (id INTEGER PRIMARY KEY NOT NULL, descricao TEXT NOT NULL, valor REAL NOT NULL)');
+    
+        console.log("Banco de dados iniciado");
+    }
+    
+    export const inserir = (descricao: string, valor: number) => {
+    
+        const ret = bcodados.runSync('INSERT INTO gastos (descricao, valor) VALUES(?, ?)', [descricao, valor]);
+        return ret;
+    
+    }
+    
+    export const listar = () => {
+    
+        return bcodados.getAllSync('SELECT * from gastos');
+    
+    }
 
-  const bcodados = SQLite.openDatabase('gastos.db');
   ```
-  ```javascript
-  import * as SQLite from 'expo-sqlite';
-
-  const bcodados = SQLite.openDatabase('gastos.db');
-
-  export const iniciar = () => {
-
-      const retorno = new Promise((resolve, reject) => {
-
-      });
-
-      return retorno;
-
-  }
-  ```
-  - Criando a estrutura do banco de dados
-  ```javascript
-  import * as SQLite from 'expo-sqlite';
-
-  const bcodados = SQLite.openDatabase('gastos.db');
-
-  export const iniciar = () => {
-
-      const retorno = new Promise((resolve, reject) => {
-
-          bcodados.transaction((tx) => {
-
-                  tx.executeSql('CREATE TABLE IF NOT EXISTS gastos (id INTEGER PRIMARY KEY NOT NULL, descricao TEXT NOT NULL, valor REAL NOT NULL)',
-                  [],
-                  () => {
-                      resolve();
-                  },
-                  (_, error) => reject(error));    
-              });
-      });
-
-      return retorno;
-
-  }
-  ```
-- Em `App.js`
-  ```javascript
-  iniciar().then(() => console.log("Iniciado banco de dados")).catch((err) => console.log(err));
-  ```
-- Inserindo gastos
-```javascript
-    bcodados.transaction((tx) => {
-
-            tx.executeSql('INSERT INTO gastos (descricao, valor) VALUES (?, ?)',
-            [descricao, valor],
-            (_, result) => {
-                console.log(result)
-                resolve(result);
-            },
-            (_, error) => reject(error));    
-        });
-```
-- Listando gastos
-```javascript
-    bcodados.transaction((tx) => {
-
-            tx.executeSql('SELECT * FROM gastos',
-            [],
-            (_, result) => {
-                resolve(result.rows._array);
-            },
-            (_, error) => reject(error));    
-        });
-```
+- Utilizar o `useEffect` para garantir que o banco de dados seja iniciado apenas uma única vez:
+    ```javascript
+      useEffect(() => {
+        iniciar();
+      }, []);
+    ```
 ***
 ### Requisições HTTP com Axios
 - Existem várias bibliotecas para efetuar requisições **HTTP**
