@@ -1,4 +1,4 @@
-import { Text, TouchableOpacity, View } from 'react-native';
+import { Button, Text, TouchableOpacity, View } from 'react-native';
 import DragList from 'react-native-draglist';
 
 export default function ListaItensDragDrop(props: any) {
@@ -15,7 +15,8 @@ export default function ListaItensDragDrop(props: any) {
                 onPressOut={onDragEnd}>
                 <View style={{ flexDirection: "row" }}>
                     <Text style={{ flex: 3 }}>{item.descricao}</Text>
-                    <Text style={{ flex: 1 }}>R$ {item.valor}</Text>
+                    <Text style={{ flex: 2 }}>R$ {item.valor}</Text>
+                    <Button title='...' onPress={() => props.onDetailClick(item.descricao)}></Button>
                 </View>
             </TouchableOpacity>
         );
