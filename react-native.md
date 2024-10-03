@@ -695,7 +695,8 @@
 - Permitem enviar mensagens de notificação dentro dos padrões de cada platadorma móvel
 - Com o uso das [Notificações do Expo](https://docs.expo.dev/versions/latest/sdk/notifications/) é possível trabalhar com notificações tanto para iOS quanto Android
 
-`npx expo install expo-notifications`
+`npx expo install expo-notifications expo-device expo-constants`
+
 - Solicitanto autorização para receber notificações
   ```javascript
   const enviarNotificacao = async () => {
@@ -710,7 +711,7 @@
 
   }
   ```
-- Agendando uma notificação
+- Agendando uma notificação (local)
   ```javascript
   Notifications.scheduleNotificationAsync({
     content: {
@@ -736,3 +737,224 @@
     },
   });
   ```
+- Para *push notifications* (somente funciona em dispositivos reais)
+    - Obter o [projectId](https://expo.dev/login)
+    - [Expo Push Notifications Tool](https://expo.dev/notifications)
+    - O *projectId* deve ser colocado dentro do arquivo `app.json`
+    ```json
+    "extra": {
+      "projectId": "ID"
+    }
+    ```
+    - Ao executar o código abaixo será exibido o `ExponentPushToken` no console
+    ```javascript
+    import { useState, useEffect, useRef } from 'react';
+    import { Text, View, Button, Platform } from 'react-native';
+    import * as Device from 'expo-device';
+    import * as Notifications from 'expo-notifications';
+    import Constants from 'expo-constants';
+    
+    Notifications.setNotificationHandler({
+        handleNotification: async () => ({
+            shouldShowAlert: true,
+            shouldPlaySound: false,
+            shouldSetBadge: false,
+        }),
+    });
+    
+    
+    console.log(Constants?.expoConfig?.extra?.projectId);
+    
+    async function sendPushNotification(expoPushToken: string) {
+        const message = {
+            to: expoPushToken,
+            sound: 'default',
+            title: 'Original Title',
+            body: 'And here is the body!',
+            data: { someData: 'goes here' },
+        };
+    
+        await fetch('https://exp.host/--/api/v2/push/send', {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Accept-encoding': 'gzip, deflate',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(message),
+        });
+    }
+    
+    
+    function handleRegistrationError(errorMessage: string) {
+        alert(errorMessage);
+        throw new Error(errorMessage);
+    }
+    
+    async function registerForPushNotificationsAsync() {
+        if (Platform.OS === 'android') {
+            Notifications.setNotificationChannelAsync('default', {
+                name: 'default',
+                importance: Notifications.AndroidImportance.MAX,
+                vibrationPattern: [0, 250, 250, 250],
+                lightColor: '#FF231F7C',
+            });
+        }
+    
+        if (Device.isDevice) {
+            const { status: existingStatus } = await Notifications.getPermissionsAsync();
+            let finalStatus = existingStatus;
+            if (existingStatus !== 'granted') {
+                const { status } = await Notifications.requestPermissionsAsync();
+                finalStatus = status;
+            }
+            if (finalStatus !== 'granted') {
+                handleRegistrationError('Permission not granted to get push token for push notification!');
+                return;
+            }
+            const projectId =
+                Constants?.expoConfig?.extra?.projectId;
+            if (!projectId) {
+                handleRegistrationError('Project ID not found');
+            }
+            try {
+                const pushTokenString = (
+                    await Notifications.getExpoPushTokenAsync({
+                        projectId,
+                    })
+                ).data;
+                console.log(pushTokenString);
+                return pushTokenString;
+            } catch (e: unknown) {
+                handleRegistrationError(`${e}`);
+            }
+        } else {
+            handleRegistrationError('Must use physical device for push notifications');
+        }
+    }
+    
+    export default function PushNotification(props: any) {
+        const [expoPushToken, setExpoPushToken] = useState('');
+        const [notification, setNotification] = useState<Notifications.Notification | undefined>(
+            undefined
+        );
+        const notificationListener = useRef<Notifications.Subscription>();
+        const responseListener = useRef<Notifications.Subscription>();
+    
+        useEffect(() => {
+            registerForPushNotificationsAsync()
+                .then(token => setExpoPushToken(token ?? ''))
+                .catch((error: any) => setExpoPushToken(`${error}`));
+    
+            notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
+                setNotification(notification);
+            });
+    
+            responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
+                console.log(response);
+            });
+    
+            return () => {
+                notificationListener.current &&
+                    Notifications.removeNotificationSubscription(notificationListener.current);
+                responseListener.current &&
+                    Notifications.removeNotificationSubscription(responseListener.current);
+            };
+        }, []);
+    
+        return (
+            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'space-around' }}>
+                <Text>Your Expo push token: {expoPushToken}</Text>
+                <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+                    <Text>Title: {notification && notification.request.content.title} </Text>
+                    <Text>Body: {notification && notification.request.content.body}</Text>
+                    <Text>Data: {notification && JSON.stringify(notification.request.content.data)}</Text>
+                </View>
+                <Button
+                    title="Press to Send Notification"
+                    onPress={async () => {
+                        await sendPushNotification(expoPushToken);
+                    }}
+                />
+            </View>
+        );
+    }
+    ```
+***
+### Mapas
+- API Google Maps é a mais popular, porém é paga
+- Uma alternativa para o Google Maps é o [OpenStreetMap - OSM](https://www.openstreetmap.org/#map=4/-15.13/-53.19)
+- Para realizar a instalação no projeto: `npx expo install react-native-maps`
+- [Documentação do React Native Maps](https://github.com/react-native-maps/react-native-maps)
+- Exemplo inicial
+```javascript
+import React from 'react';
+import { StyleSheet, View } from 'react-native';
+import MapView, { UrlTile } from 'react-native-maps';
+
+export default function MapComponent(props: any) {
+    return (
+        <View style={styles.container}>
+            <MapView
+                style={styles.map}
+                initialRegion={{
+                    latitude: -23.58701982416051,
+                    longitude: -46.64434391669733,
+                    latitudeDelta: 0.0922,
+                    longitudeDelta: 0.0421, 
+                }}>
+
+                {/* Usando tiles do OpenStreetMap */}
+                <UrlTile urlTemplate="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" maximumZ={19} />
+
+            </MapView>
+        </View>
+    );
+};
+
+const styles = StyleSheet.create({
+    container: {
+        ...StyleSheet.absoluteFillObject,
+        height: '100%',
+        width: '100%',
+    },
+    map: {
+        ...StyleSheet.absoluteFillObject,
+    },
+});
+```
+- Adicionando um marcador (deve ser criado dentro da `MapView`)
+    ```javascript
+    <Marker
+        key="ESPMJT"
+        coordinate={{ latitude: -23.586931331827458, longitude: -46.64433318786136 }}
+        title="ESPM"
+        description="ESPM Tech"
+    />
+    ```
+- Adicionando mais de um marcador
+  ```javascript
+  const marcadores: any = [
+      { key: "m2", coord: { latitude: -23.6, longitude: -46.64433318786136 }, title: "M2", description: "Marcador 2" },
+      { key: "m1", coord: { latitude: -23.586931331827458, longitude: -46.64433318786136 }, title: "M1", description: "Marcador 1" },
+  ];
+  
+  {marcadores.map((item: any, idx: number) => (
+      <Marker
+          key={idx}
+          coordinate={item.coord}
+          title={item.title}
+          image={require('../assets/coin.png')}
+          description={item.description} />
+  ))}
+  ```
+- Entre as *tags* `<Marker><Callout></<Callout></Marker>` podem ser inseridos componentes
+- Exemplo de *drag and drop*
+  ```javascript
+  <Marker draggable
+    coordinate={this.state.x}
+    onDragEnd={(e) => this.setState({ x: e.nativeEvent.coordinate })} />
+  ```
+- Eventos `onPress={(aqui: MapPressEvent) => console.log(aqui.nativeEvent.coordinate)}`
+
+
