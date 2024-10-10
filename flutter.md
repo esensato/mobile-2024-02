@@ -1,12 +1,10 @@
-## React Native - Aula 01
+## Flutter / Dart
 
-- [NodeJs Download](https://nodejs.org/en/download)
-- [React Native](https://reactnative.dev/)
-- [VS Code](https://code.visualstudio.com/download)
-- [Android Studio / SDK](https://developer.android.com/studio)
-
-- Componentes visuais do React Native são compilados nativamente para as respectivas plataformas (iOS, Android, etc...)
-- Lógica de negócio permanece em *JavaScript*
+- [Flutter Download Mac Silicon](https://storage.googleapis.com/flutter_infra_release/releases/stable/macos/flutter_macos_arm64_3.24.3-stable.zip)
+- [Flutter Download Mac Intel](https://storage.googleapis.com/flutter_infra_release/releases/stable/macos/flutter_macos_3.24.3-stable.zip)
+- [Flutter Download Windows](https://storage.googleapis.com/flutter_infra_release/releases/stable/windows/flutter_windows_3.24.3-stable.zip)
+### Linguagem Dart
+- Primeiro programa em **Dart**
 
     ```c++
     void main() {
