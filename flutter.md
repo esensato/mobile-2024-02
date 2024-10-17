@@ -251,4 +251,135 @@ Acao opcoes() {
   }
 }
 ```
+***
+### Flutter
+- Criar uma pasta `assets` dentro da raiz do projeto
+- Copiar o arquivo `card-deck.png` para dentro da pasta `assets`
+- Incluir a referência dentro do arquivo `pubspec.yaml`
+```yml
+flutter:
+  assets:
+    - assets/
+```
+- Incluir também as dependências
+```yml
+dependencies:
+  image: ^4.2.0
+  flutter:
+    sdk: flutter
+```
+- Criar uma *splash screen* para iniciar o jogo
+```javascript
+class BlackJackSlpash extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
 
+    Future.delayed(Duration(seconds: 5), () {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => BlackJackPage(titulo: "Simple Black Jack")),
+      );
+    });
+    return Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Image.asset("assets/blackjack-logo.png")
+          ],
+        ),
+      )
+    );
+  }
+}
+```
+- Código de inicialização para carregar a imagem das cartas
+```javascript
+var imagemCarta;
+
+void main() async {
+
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  imagemCarta = await loadImagem();
+  imagemCarta = getCarta(2, imagemCarta);
+
+  runApp(const BlackJackApp());
+
+}
+```
+- Tela principal do jogo
+    - Utilizar o `Expanded` com a propriedade `flex` para distribuir as áreas das cartas e dos botões de comando do jogo
+    - Também pode-se utilizar os *widgets* `Container` e `Center` para alinhar melhor os itens da tela
+```javascript
+class BlackJackPage extends StatefulWidget {
+
+  final String titulo;
+
+  const BlackJackPage({super.key, required this.titulo});
+
+  @override
+  State<BlackJackPage> createState() => _BlackJackState();
+}
+
+class _BlackJackState extends State<BlackJackPage> {
+
+  @override
+  Widget build(BuildContext context) {
+
+     return Scaffold(
+      appBar: AppBar(
+          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+          title: Text(widget.titulo),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+             Image.memory(imagemCarta)
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: (){},
+        tooltip: 'Increment',
+        child: const Icon(Icons.add),
+      ),
+    );
+  }
+}
+```
+- Funções úteis para manipulação de imagens
+```javascript
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:image/image.dart' as img;
+
+const LARGURA_IMAGEM = 99;
+const ALTURA_IMAGEM = 153;
+const TOTAL_CARTA_LINHA = 4;
+const TOTAL_CARTA_COLUNA = 13;
+
+Future<Uint8List> loadImagem() async {
+
+  WidgetsFlutterBinding.ensureInitialized();
+  final ByteData data = await rootBundle.load("assets/card-deck.png");
+  return data.buffer.asUint8List();
+
+}
+
+Uint8List getCarta(int nro, Uint8List imagem) {
+
+  var originalImage = img.decodeImage(imagem);
+  var copyedImage = img.copyCrop(originalImage!, x: getImgX(nro), y: getImgY(nro), width: LARGURA_IMAGEM, height: ALTURA_IMAGEM);
+  return   Uint8List.fromList(img.encodePng(copyedImage));
+}
+
+int getImgX(int pos) {
+  final int x = pos % TOTAL_CARTA_COLUNA;
+  return x * LARGURA_IMAGEM;
+}
+
+int getImgY(int pos) {
+  final int y = pos % TOTAL_CARTA_LINHA;
+  return y * ALTURA_IMAGEM;
+}
+```
