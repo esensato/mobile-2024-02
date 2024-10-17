@@ -261,6 +261,7 @@ flutter:
   assets:
     - assets/
 ```
+- As imagens podem ser obtidas aqui: [blackjack-logo.png](https://github.com/esensato/mobile-2024-02/blob/main/img/blackjack-logo.png) e [card-deck.png](https://github.com/esensato/mobile-2024-02/blob/main/img/card-deck.png)
 - Incluir também as dependências
 ```yml
 dependencies:
