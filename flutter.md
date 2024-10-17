@@ -268,6 +268,7 @@ dependencies:
   flutter:
     sdk: flutter
 ```
+- Uma referência dos principais *widgets* do **flutter** podem ser vistos aqui [api.flutter.dev - material](https://api.flutter.dev/flutter/material/material-library.html)
 - Criar uma *splash screen* para iniciar o jogo
 ```javascript
 class BlackJackSlpash extends StatelessWidget {
@@ -309,6 +310,12 @@ void main() async {
 - Tela principal do jogo
     - Utilizar o `Expanded` com a propriedade `flex` para distribuir as áreas das cartas e dos botões de comando do jogo
     - Também pode-se utilizar os *widgets* `Container` e `Center` para alinhar melhor os itens da tela
+    - Utilizar um [TextField](https://api.flutter.dev/flutter/material/TextField-class.html) para que o jogador informe o seu nome
+    ```javascript
+    var txtController = TextEditingController();
+    TextField(controller: txtController)
+    ```
+    - Para obter o texto digitado: `txtController.text`
 ```javascript
 class BlackJackPage extends StatefulWidget {
 
