@@ -12,7 +12,9 @@ class Jogador {
   }
   var _pontos = 100; // private pontos
   get pontos => _pontos; // somente leitura
-
+  set pontos (newVal) {
+    _pontos = newVal;
+  }
   // metodo construtor com parametro nomeado e opcional.
   // Ex: var j = Jogador(nome: 'Teste') ou var j = Jogador()
   Jogador({this.nome = 'Mesa'});
