@@ -17,13 +17,15 @@ class _TelaCadastroState extends State<TelaCadastro> {
         appBar: AppBar(title: const Text('Simple Black Jack')),
         body: Column(children: [
           const SizedBox(height: 10.0),
-          TextField(
+          Image.asset('assets/blackjack-logo.png', width: 128, height: 128,),
+          Container(margin: const EdgeInsets.all(12), child: TextField(
             decoration: const InputDecoration(
               border: OutlineInputBorder(),
               labelText: 'Informe o seu nome',
             ),
-              controller: txtNome,
-          ),
+            controller: txtNome,
+          ),)
+          ,
           const SizedBox(height: 10.0),
           ElevatedButton(
             onPressed: () {

@@ -294,6 +294,107 @@ class BlackJackSlpash extends StatelessWidget {
   }
 }
 ```
+- Criar a tela de cadastro `tela_cadastro.dart` para que o jogador informe o seu nome
+```javascript
+import 'package:flutter/material.dart';
+import 'package:simple_black_jack/tela_mesa_jogo.dart';
+
+class TelaCadastro extends StatefulWidget {
+  @override
+  State<TelaCadastro> createState() => _TelaCadastroState();
+}
+
+class _TelaCadastroState extends State<TelaCadastro> {
+
+  var txtNome = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(title: const Text('Simple Black Jack')),
+        body: Column(children: [
+          const SizedBox(height: 10.0),
+          TextField(
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(),
+              labelText: 'Informe o seu nome',
+            ),
+              controller: txtNome,
+          ),
+          const SizedBox(height: 10.0),
+          ElevatedButton(
+            onPressed: () {
+              // Avança para a tela principal do jogo
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(builder: (context) => TelaMesaJogo(jogador: txtNome.text,)),
+              );
+            },
+            child: const Text('Iniciar o jogo'),
+          ),
+        ],)
+,
+      ),
+    );
+  }
+
+}
+```
+- Criar a tela `tela_mesa_jogo.dart` que exibe a mesa do jogo
+```javascript
+import 'package:flutter/material.dart';
+import 'package:simple_black_jack/jogador.dart';
+
+class TelaMesaJogo extends StatefulWidget {
+
+  var jogador_humano;
+
+  TelaMesaJogo({jogador = ''}) {
+    jogador_humano = Jogador(nome: jogador);
+  }
+
+  @override
+  State<TelaMesaJogo> createState() => _TelaMesaJogoState();
+}
+
+class _TelaMesaJogoState extends State<TelaMesaJogo> {
+
+  Widget getPlacar() {
+    return Row(children: [
+      Expanded(flex: 2, child: Text('Jogador: ${widget.jogador_humano.nome}')),
+      Expanded(flex: 1,child: Text('Pontos: ${widget.jogador_humano.pontos}'))
+    ]);
+  }
+
+  Widget getCartas() {
+    return Row(children: [Expanded(child: Image.asset("assets/verso-carta.png")),
+      Expanded(child: Image.asset("assets/verso-carta.png")),
+      Expanded(child: Image.asset("assets/verso-carta.png")),
+      Expanded(child: Image.asset("assets/verso-carta.png"))
+    ]);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(title: const Text('Simple Black Jack')),
+        body: Column(children: [getPlacar(),
+        getCartas(),
+          getCartas()
+        ]),
+        floatingActionButton: FloatingActionButton(onPressed: () {
+          setState(() {
+            widget.jogador_humano.pontos++;
+          });
+        }),
+      ),
+    );
+  }
+
+}
+```
+
 - Código de inicialização para carregar a imagem das cartas
 ```javascript
 var imagemCarta;
