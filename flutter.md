@@ -346,9 +346,9 @@ class BlackJackApp extends StatelessWidget {
 ```javascript
 import 'package:flutter/material.dart';
 
-class BlackJackSlpash extends StatelessWidget {
+class BlackJackSplash extends StatelessWidget {
 
-  const BlackJackSlpash({super.key});
+  const BlackJackSplash({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -441,7 +441,7 @@ class TelaPrincipal extends StatefulWidget {
 
 class _TelaPrincipalState extends State<TelaPrincipal> {
 
-  Widget telaAtual = const BlackJackSlpash();
+  Widget telaAtual = const BlackJackSplash();
 
   @override
   Widget build(BuildContext context) {
@@ -547,11 +547,11 @@ class TelaCadastro extends StatefulWidget {
 ```javascript
 import 'package:flutter/material.dart';
 
-class BlackJackSlpash extends StatelessWidget {
+class BlackJackSplash extends StatelessWidget {
 
   final Function? onTimeout;
 
-  const BlackJackSlpash({super.key, this.onTimeout});
+  const BlackJackSplash({super.key, this.onTimeout});
 
   @override
   Widget build(BuildContext context) {
@@ -595,7 +595,7 @@ class _TelaPrincipalState extends State<TelaPrincipal> {
 
   _TelaPrincipalState() {
 
-    telaAtual = BlackJackSlpash(onTimeout: () => exibirTelaCadastro());
+    telaAtual = BlackJackSplash(onTimeout: () => exibirTelaCadastro());
 
   }
 
