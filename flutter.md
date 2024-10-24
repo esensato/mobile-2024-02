@@ -250,7 +250,7 @@ Acao opcoes() {
       return Acao.esperar;
   }
 }
-```
+```    
 ***
 ### Flutter
 - Criar uma pasta `assets` dentro da raiz do projeto
@@ -261,7 +261,7 @@ flutter:
   assets:
     - assets/
 ```
-- As imagens podem ser obtidas aqui: [blackjack-logo.png](https://github.com/esensato/mobile-2024-02/blob/main/img/blackjack-logo.png) e [card-deck.png](https://github.com/esensato/mobile-2024-02/blob/main/img/card-deck.png)
+- As imagens podem ser obtidas aqui: [blackjack-logo.png](https://github.com/esensato/mobile-2024-02/blob/main/img/blackjack-logo.png) e [card-deck.png](https://github.com/esensato/mobile-2024-02/blob/main/img/card-deck.png) e [verso-carta.png](https://github.com/esensato/mobile-2024-02/blob/main/img/verso-carta.png)
 - Incluir também as dependências
 ```yml
 dependencies:
@@ -270,43 +270,218 @@ dependencies:
     sdk: flutter
 ```
 - Uma referência dos principais *widgets* do **flutter** podem ser vistos aqui [api.flutter.dev - material](https://api.flutter.dev/flutter/material/material-library.html)
-- Criar uma *splash screen* para iniciar o jogo
+- Dentro do arquivo `main.dart` definir a primeira tela do jogo
 ```javascript
-class BlackJackSlpash extends StatelessWidget {
+import 'package:flutter/material.dart';
+void main() async {
+
+  runApp(const BlackJackApp());
+
+}
+
+class BlackJackApp extends StatelessWidget {
+
+  const BlackJackApp({super.key});
+
   @override
   Widget build(BuildContext context) {
 
-    Future.delayed(Duration(seconds: 5), () {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => BlackJackPage(titulo: "Simple Black Jack")),
-      );
-    });
-    return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Image.asset("assets/blackjack-logo.png")
-          ],
-        ),
-      )
+    return const MaterialApp(
+      title: 'Simple Black Jack',
+      home: Center(child: Text('Simple Black Jack'))
     );
   }
 }
 ```
-- Criar a tela de cadastro `tela_cadastro.dart` para que o jogador informe o seu nome
+- Implementar a tela principal do jogo em um arquivo `tela_principal.dart` que servirá apenas para controlar a exibição das demais telas a serem criadas
 ```javascript
 import 'package:flutter/material.dart';
-import 'package:simple_black_jack/tela_mesa_jogo.dart';
+
+class TelaPrincipal extends StatefulWidget {
+
+  const TelaPrincipal({super.key});
+
+  @override
+  State<StatefulWidget> createState() => _TelaPrincipalState();
+
+}
+
+class _TelaPrincipalState extends State<TelaPrincipal> {
+  
+  @override
+  Widget build(BuildContext context) {
+      return const Scaffold(body: Center(child: Text('Simple Black Jack')));
+  }
+
+}
+```
+- Alterar a `main.dart` para que a propriedade `home` aponte para a `TelaPrincipal`
+```javascript
+import 'package:flutter/material.dart';
+import 'package:simple_black_jack_local/tela_principal.dart';
+
+void main() async {
+
+  runApp(const BlackJackApp());
+
+}
+
+class BlackJackApp extends StatelessWidget {
+
+  const BlackJackApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+
+    return const MaterialApp(
+      title: 'Simple Black Jack',
+      home: TelaPrincipal()
+    );
+
+  }
+
+}
+```
+- Criar uma *splash screen* para iniciar o jogo em um arquivo `splash_screen.dart`
+```javascript
+import 'package:flutter/material.dart';
+
+class BlackJackSlpash extends StatelessWidget {
+
+  const BlackJackSlpash({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+
+    return Scaffold(
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Image.asset("assets/blackjack-logo.png")
+            ],
+          ),
+        )
+    );
+  }
+
+}
+```
+- Cria inicialmente a tela de cadastro do jogador em um arquivo `tela_cadastro.dart`
+```javascript
+import 'package:flutter/material.dart';
 
 class TelaCadastro extends StatefulWidget {
+
+   const TelaCadastro({super.key});
+
   @override
   State<TelaCadastro> createState() => _TelaCadastroState();
+
+}
+
+class _TelaCadastroState extends State<TelaCadastro> {
+
+  @override
+  Widget build(BuildContext context) {
+
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(title: const Text('Simple Black Jack')),
+        body: const Center(child: Text('Tela de Cadastro'))
+      ),
+    );
+
+  }
+
+}
+```
+- Criar inicialmente a tela da mesa do jogo em um arquivo `tela_mesa_jogo.dart`
+```javascript
+import 'package:flutter/material.dart';
+
+class TelaMesaJogo extends StatefulWidget {
+
+  final nome;
+
+  const TelaMesaJogo({super.key, this.nome});
+
+  @override
+  State<TelaMesaJogo> createState() => _TelaMesaJogoState();
+}
+
+class _TelaMesaJogoState extends State<TelaMesaJogo> {
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(title: const Text('Simple Black Jack')),
+        body: const Center(child: Text('Mesa do Jogo'))
+      ),
+    );
+  }
+
+}
+```
+- Atualizar a `tela_principal.dart` com o código para fechamento automático da tela e direcionamento para a tela de cadastro
+```javascript
+import 'package:flutter/material.dart';
+import 'package:simple_black_jack_local/splash_screen.dart';
+import 'package:simple_black_jack_local/tela_cadastro.dart';
+
+class TelaPrincipal extends StatefulWidget {
+
+  const TelaPrincipal({super.key});
+
+  @override
+  State<StatefulWidget> createState() => _TelaPrincipalState();
+
+}
+
+class _TelaPrincipalState extends State<TelaPrincipal> {
+
+  Widget telaAtual = const BlackJackSlpash();
+
+  @override
+  Widget build(BuildContext context) {
+    Future.delayed(const Duration(seconds: 5), () {
+      setState(() {
+        telaAtual = TelaCadastro();
+      });
+    });
+
+      return telaAtual;
+  }
+
+}
+```
+- Editar a tela de cadastro `tela_cadastro.dart` para que o jogador informe o seu nome utilizando um [TextField](https://api.flutter.dev/flutter/material/TextField-class.html) e um [ElevatedButton](https://api.flutter.dev/flutter/material/ElevatedButton-class.html)
+- Para incluir espaços em branco entre os *widgets* pode-se utilizar o [SizedBox](https://api.flutter.dev/flutter/widgets/SizedBox-class.html)
+```javascript
+import 'package:flutter/material.dart';
+
+class TelaCadastro extends StatefulWidget {
+
+  @override
+  State<TelaCadastro> createState() => _TelaCadastroState();
+
 }
 
 class _TelaCadastroState extends State<TelaCadastro> {
 
   var txtNome = TextEditingController();
+
+  Widget getTxtNome() {
+    return Container(margin: const EdgeInsets.all(12),
+        child:  TextField(
+      decoration: const InputDecoration(
+        border: OutlineInputBorder(),
+        labelText: 'Informe o seu nome',
+      ),
+      controller: txtNome,
+    ));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -314,33 +489,144 @@ class _TelaCadastroState extends State<TelaCadastro> {
       home: Scaffold(
         appBar: AppBar(title: const Text('Simple Black Jack')),
         body: Column(children: [
+          Image.asset("assets/blackjack-logo.png", width: 128, height: 128),
           const SizedBox(height: 10.0),
-          TextField(
-            decoration: const InputDecoration(
-              border: OutlineInputBorder(),
-              labelText: 'Informe o seu nome',
-            ),
-              controller: txtNome,
-          ),
+          getTxtNome(),
           const SizedBox(height: 10.0),
           ElevatedButton(
-            onPressed: () {
-              // Avança para a tela principal do jogo
-              Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: (context) => TelaMesaJogo(jogador: txtNome.text,)),
-              );
-            },
+            onPressed: () {},
             child: const Text('Iniciar o jogo'),
           ),
         ],)
-,
+        ,
       ),
     );
   }
 
 }
 ```
-- Criar a tela `tela_mesa_jogo.dart` que exibe a mesa do jogo
+- Quando o *widget* `TelaCadastro` for instanciado ele deve receber um método de *callback* como parâmetro para que seja acionado quando o usuário clicar no botão **Iniciar Jogo**
+```javascript
+class TelaCadastro extends StatefulWidget {
+
+  Function? iniciarJogoOnClick;
+
+   TelaCadastro({super.key,  this.iniciarJogoOnClick});
+
+  @override
+  State<TelaCadastro> createState() => _TelaCadastroState();
+}
+```
+- Alterar também a função `build` para incluir no `onPressed` a chamada para o *callback* passando o nome do jogador como parâmetro
+```javascript
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(title: const Text('Simple Black Jack')),
+        body: Column(children: [
+          Image.asset("assets/blackjack-logo.png", width: 128, height: 128),
+          const SizedBox(height: 10.0),
+          getTxtNome(),
+          const SizedBox(height: 10.0),
+          ElevatedButton(
+            onPressed: () {
+
+              widget.iniciarJogoOnClick!(txtNome.text);
+
+            },
+            child: const Text('Iniciar o jogo'),
+          ),
+        ],)
+        ,
+      ),
+    );
+  }
+```
+- A mesma coisa deve ocorrer com a `BlackJackSplash`
+```javascript
+import 'package:flutter/material.dart';
+
+class BlackJackSlpash extends StatelessWidget {
+
+  final Function? onTimeout;
+
+  const BlackJackSlpash({super.key, this.onTimeout});
+
+  @override
+  Widget build(BuildContext context) {
+
+    Future.delayed(const Duration(seconds: 5), () {
+      onTimeout!();
+    });
+
+    return Scaffold(
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Image.asset("assets/blackjack-logo.png")
+            ],
+          ),
+        )
+    );
+  }
+}
+```
+- Refatorar a `TelaPrincipal` para acionar as demais passando os métodos de *callback*
+```javascript
+import 'package:flutter/material.dart';
+import 'package:simple_black_jack_local/splash_screen.dart';
+import 'package:simple_black_jack_local/tela_cadastro.dart';
+import 'package:simple_black_jack_local/tela_mesa_jogo.dart';
+
+class TelaPrincipal extends StatefulWidget {
+
+  const TelaPrincipal({super.key});
+
+  @override
+  State<StatefulWidget> createState() => _TelaPrincipalState();
+
+}
+
+class _TelaPrincipalState extends State<TelaPrincipal> {
+
+  Widget? telaAtual;
+
+  _TelaPrincipalState() {
+
+    telaAtual = BlackJackSlpash(onTimeout: () => exibirTelaCadastro());
+
+  }
+
+  void exibirTelaCadastro() {
+
+    setState(() {
+      telaAtual = TelaCadastro(iniciarJogoOnClick: (nome){
+        exibirTelaMesa(nome: nome);
+      });
+    });
+
+  }
+
+  void exibirTelaMesa({String nome = ''}) {
+
+    setState(() {
+      telaAtual = TelaMesaJogo();
+    });
+
+  }
+
+  @override
+  Widget build(BuildContext context) {
+
+      return telaAtual!;
+
+  }
+
+}
+```
+- Editar a tela `tela_mesa_jogo.dart` que exibe a mesa do jogo
 ```javascript
 import 'package:flutter/material.dart';
 import 'package:simple_black_jack/jogador.dart';
@@ -394,68 +680,118 @@ class _TelaMesaJogoState extends State<TelaMesaJogo> {
 
 }
 ```
-
-- Código de inicialização para carregar a imagem das cartas
+- Para facilitar a manutenção, criar uma classe para armazenar as *decorations* e aplicar, por exemplo, no `Container` que contém as cartas da mesa
 ```javascript
-var imagemCarta;
+import 'package:flutter/material.dart';
 
-void main() async {
+class Decorations {
 
-  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
-  imagemCarta = await loadImagem();
-  imagemCarta = getCarta(2, imagemCarta);
+  static Decoration getBoxDecoration() {
 
-  runApp(const BlackJackApp());
-
-}
-```
-- Tela principal do jogo
-    - Utilizar o `Expanded` com a propriedade `flex` para distribuir as áreas das cartas e dos botões de comando do jogo
-    - Também pode-se utilizar os *widgets* `Container` e `Center` para alinhar melhor os itens da tela
-    - Utilizar um [TextField](https://api.flutter.dev/flutter/material/TextField-class.html) para que o jogador informe o seu nome
-    ```javascript
-    var txtController = TextEditingController();
-    TextField(controller: txtController)
-    ```
-    - Para obter o texto digitado: `txtController.text`
-```javascript
-class BlackJackPage extends StatefulWidget {
-
-  final String titulo;
-
-  const BlackJackPage({super.key, required this.titulo});
-
-  @override
-  State<BlackJackPage> createState() => _BlackJackState();
-}
-
-class _BlackJackState extends State<BlackJackPage> {
-
-  @override
-  Widget build(BuildContext context) {
-
-     return Scaffold(
-      appBar: AppBar(
-          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-          title: Text(widget.titulo),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-             Image.memory(imagemCarta)
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: (){},
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
+    return BoxDecoration(
+      color: Colors.green,
+      border: Border.all(
+        color: Colors.black,
+        width: 2.0,
       ),
     );
+
   }
+
+  static ButtonStyle getButtonStyle() {
+
+    return ElevatedButton.styleFrom(
+    backgroundColor: Colors.green[700],
+    shadowColor: Colors.green,
+    elevation: 3,
+    );
+
+  }
+
+  static TextStyle getButtonTextStyle() {
+
+    return const TextStyle(color: Colors.white);
+
+  }
+
 }
 ```
+- Por exemplo, para as cartas
+```javascript
+Widget getCartas() {
+  return Container(decoration: Decorations.getBoxDecoration(),
+  child:Row(children: [Expanded(child: Image.asset("assets/verso-carta.png")),
+    Expanded(child: Image.asset("assets/verso-carta.png")),
+    Expanded(child: Image.asset("assets/verso-carta.png")),
+    Expanded(child: Image.asset("assets/verso-carta.png"))
+  ]));
+
+}
+```
+- Código de inicialização para carregar a imagem das cartas dentro de `_TelaMesaJogoState`
+```javascript
+
+  // variaveis
+  var imagemCarta;
+  var versoCarta;
+  var _esperar = true;
+  var cartas;
+
+  // método acionado na inicialização (somente uma vez)
+  @override
+  void initState() {
+    super.initState();
+
+    loadImagem(nome: 'verso-carta.png').then((img){
+      versoCarta = img;
+      // carrega as cartas com a imagem do verso
+      cartas = [versoCarta, versoCarta, versoCarta, versoCarta];
+
+    });
+
+    loadImagem(nome: 'card-deck.png').then((img){
+      imagemCarta = img;
+      setState(() {
+        _esperar = false;
+        cartas[0] = getCarta(0, imagemCarta);
+      });
+    });
+  }
+```
+- Incluir um [CircularProgressIndicator](https://api.flutter.dev/flutter/material/CircularProgressIndicator-class.html) para exibir a tela somente quando a imagem das cartas for carregada
+- Criar uma caixa de texto para que o jogador possa realizar a aposta
+```javascript
+  Widget getAposta() {
+    return Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          IconButton(
+            icon: Icon(Icons.remove),
+            onPressed: (){
+            // implementar: diminuir aposta
+            },
+          ),
+          SizedBox(
+            width: 80,
+            child: TextField(
+              keyboardType: TextInputType.number,
+              textAlign: TextAlign.center,
+              readOnly: true,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+              ),
+            ),
+          ),
+          IconButton(
+            icon: Icon(Icons.add),
+            onPressed: (){
+            // implementar: aumentar aposta
+            },
+          )
+        ]);
+  }
+```
+
 - Funções úteis para manipulação de imagens
 ```javascript
 import 'package:flutter/material.dart';
