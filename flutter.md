@@ -914,5 +914,4 @@ int getImgY(int pos) {
   return y * alturaImagem;
 
 }
-
 ```
