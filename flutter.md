@@ -791,6 +791,87 @@ Widget getCartas() {
         ]);
   }
 ```
+- Utilizar *shared preferences* para armzenanar o nome de usuário incluindo a dependência
+```yml
+dependencies:
+  flutter:
+    sdk: flutter
+  shared_preferences: ^2.0.15
+```
+- Implementar o armazenamento
+```javascript
+import 'package:shared_preferences/shared_preferences.dart';
+
+// le o nome arazenado
+Future<void> _loadName() async {
+  final prefs = await SharedPreferences.getInstance();
+  _savedName = prefs.getString('userName') ?? 'Nenhum nome salvo';
+
+}
+
+// grava / atualiza o nome
+Future<void> _saveName() async {
+  final prefs = await SharedPreferences.getInstance();
+  await prefs.setString('userName', _nameController.text);
+}
+```
+#### Trabalhando com JSON
+- Utilizar o pacote convert (`dart:convert`) para interpretar a sintaxe JSON com a função `json.decode`
+- Objeto simples
+```javascript
+import 'dart:convert';
+
+var jsonMap = '{"id":"123"}'; //Objeto JSON simples
+Map<String, dynamic> mapa = json.decode(jsonMap);
+print(json.decode(mapa['id']));
+```
+- Objeto do tipo `array`
+```javascript
+var jsonList = '[{"id":"123"}, {"id":"456"}]'; //Objeto JSON Array
+List<dynamic> lista = json.decode(jsonList);
+lista.forEach((element) {
+  print(element['id']);
+});
+```
+- Objeto complexo
+```javascript
+// Array com Array
+var jsonComplexo = '[{"id":"123", "itens":["A","B"]}, '{"id":"456", "itens":["C","D"]}]';
+List<dynamic> listaComplexo = json.decode(jsonComplexo);
+listaComplexo.forEach((element) {
+  print(element['itens'][0]);
+});
+```
+#### Requisições HTTP
+- O pacote http (`package:http/http.dart`) oferece uma grande facilidade na execução de requisições *HTTP* (*GET*, *POST*, etc...)
+- Tais requisições podem ser utilizadas para interagir com serviços publicados na Internet (nuvem) utilizando o padrão *RESTFul*
+- A classe [Uri](https://api.flutter.dev/flutter/dart-core/Uri-class.html) possui uma série de funções interessantes para criar *URLs* padronizadas e faz parte do pacote *core* do **Flutter**
+- Exemplo de uma requisição *GET*
+```javascript
+import 'package:http/http.dart' as http;
+
+final url = Uri.https('simple-black-jack.glitch.me', 'pontos');
+http.get(uri,
+    headers: <String, String> {'Content-Type' : 'application/json', 'Accept' : 'application/json'})
+    .then((resposta) => {
+      if (resposta.statusCode == 200) {
+        print(jsonDecode(resposta.body));
+      }
+});
+```
+- Exemplo de uma requisição *POST*
+```javascript
+final url = Uri.https('simple-black-jack.glitch.me', 'novo');
+final Map<String, String> header = {'Content-Type' : 'application/json',
+                                    'Accept' : 'application/json'};
+final body = '{"username":"${username.text}"}';
+// requisição http é assíncrona
+http.post(url, headers: header, body: body).then((resp) {
+
+    print(resp);
+
+});
+```
 
 - Funções úteis para manipulação de imagens
 ```javascript

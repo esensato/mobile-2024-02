@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:simple_black_jack/styles.dart';
 import 'package:simple_black_jack/tela_mesa_jogo.dart';
 
 class TelaCadastro extends StatefulWidget {
+
+  // função callback acionada quando o usuario clicar no botão Iniciar Jogo
+  Function? onStartGame;
+
+  TelaCadastro({super.key, this.onStartGame});
+
   @override
   State<TelaCadastro> createState() => _TelaCadastroState();
 }
@@ -19,22 +26,19 @@ class _TelaCadastroState extends State<TelaCadastro> {
           const SizedBox(height: 10.0),
           Image.asset('assets/blackjack-logo.png', width: 128, height: 128,),
           Container(margin: const EdgeInsets.all(12), child: TextField(
-            decoration: const InputDecoration(
-              border: OutlineInputBorder(),
-              labelText: 'Informe o seu nome',
-            ),
+            decoration: Styles.getInputTextStyle(label: 'Informe seu nome'),
             controller: txtNome,
           ),)
           ,
           const SizedBox(height: 10.0),
           ElevatedButton(
+            style: Styles.getButtonStyle(cor: Colors.green[700]),
             onPressed: () {
-              // Avança para a tela principal do jogo
-              Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: (context) => TelaMesaJogo(jogador: txtNome.text,)),
-              );
+              // acionar o método de callback onStartGame passado como parâmetro
+              // devolver para onStartGame o nome do jogador informado no campo txtNome
+              widget.onStartGame!(txtNome.text);
             },
-            child: const Text('Iniciar o jogo'),
+            child: Text('Iniciar o jogo', style: Styles.getTextStyle()),
           ),
         ],)
 ,
