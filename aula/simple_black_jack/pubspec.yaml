@@ -6,6 +6,8 @@ environment:
   sdk: ^3.5.3
 dependencies:
   image: ^3.0.1
+  http: ^1.2.2
+  shared_preferences: ^2.3.2
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.8

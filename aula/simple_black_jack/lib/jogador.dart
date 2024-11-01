@@ -10,14 +10,11 @@ class Jogador {
       _aposta = pontos;
     }
   }
-  var _pontos = 100; // private pontos
-  get pontos => _pontos; // somente leitura
-  set pontos (newVal) {
-    _pontos = newVal;
-  }
+  var pontos = 1000;
+
   // metodo construtor com parametro nomeado e opcional.
   // Ex: var j = Jogador(nome: 'Teste') ou var j = Jogador()
-  Jogador({this.nome = 'Mesa'});
+  Jogador({this.nome = 'Mesa', this.pontos = 1000});
 
   @override
   String toString() {

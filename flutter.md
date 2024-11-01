@@ -804,6 +804,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 // le o nome arazenado
 Future<void> _loadName() async {
+  SharedPreferences.setMockInitialValues({});
   final prefs = await SharedPreferences.getInstance();
   _savedName = prefs.getString('userName') ?? 'Nenhum nome salvo';
 

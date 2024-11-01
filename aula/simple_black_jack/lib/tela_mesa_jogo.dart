@@ -8,8 +8,8 @@ class TelaMesaJogo extends StatefulWidget {
 
   Jogador? jogadorHumano;
 
-  TelaMesaJogo({super.key, jogador = ''}) {
-    jogadorHumano = Jogador(nome: jogador);
+  TelaMesaJogo({super.key, jogador = '', pontos = 1000}) {
+    jogadorHumano = Jogador(nome: jogador, pontos: pontos);
   }
 
   @override
@@ -42,7 +42,7 @@ class _TelaMesaJogoState extends State<TelaMesaJogo> {
       setState(() {
         // imagens ja carregadas, pode exibir as cartas
         _esperar = false;
-        _cartasJogador[0] = getCarta(0, _imagemCarta!);
+        _cartasJogador[0] = getCarta(12, _imagemCarta!);
       });
     });
   }
