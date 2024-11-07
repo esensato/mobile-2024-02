@@ -1,9 +1,5 @@
 ## Android Nativo
-
-- [Flutter Download Mac Silicon](https://storage.googleapis.com/flutter_infra_release/releases/stable/macos/flutter_macos_arm64_3.24.3-stable.zip)
-- [Flutter Download Mac Intel](https://storage.googleapis.com/flutter_infra_release/releases/stable/macos/flutter_macos_3.24.3-stable.zip)
-- [Flutter Download Windows](https://storage.googleapis.com/flutter_infra_release/releases/stable/windows/flutter_windows_3.24.3-stable.zip)
-
+- [Developer Android](https://developer.android.com/?hl=pt-br)
 - Classe principal deve especializar `AppCompatActivity`
 ```java
 public class MainActivity extends AppCompatActivity {
