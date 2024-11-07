@@ -271,7 +271,7 @@ dependencies:
 ```
 - Uma referência dos principais *widgets* do **flutter** podem ser vistos aqui [api.flutter.dev - material](https://api.flutter.dev/flutter/material/material-library.html)
 - Dentro do arquivo `main.dart` definir a primeira tela do jogo
-```javascript
+```dart
 import 'package:flutter/material.dart';
 void main() async {
 
@@ -294,7 +294,7 @@ class BlackJackApp extends StatelessWidget {
 }
 ```
 - Implementar a tela principal do jogo em um arquivo `tela_principal.dart` que servirá apenas para controlar a exibição das demais telas a serem criadas
-```javascript
+```dart
 import 'package:flutter/material.dart';
 
 class TelaPrincipal extends StatefulWidget {
@@ -316,7 +316,7 @@ class _TelaPrincipalState extends State<TelaPrincipal> {
 }
 ```
 - Alterar a `main.dart` para que a propriedade `home` aponte para a `TelaPrincipal`
-```javascript
+```dart
 import 'package:flutter/material.dart';
 import 'package:simple_black_jack_local/tela_principal.dart';
 
@@ -343,7 +343,7 @@ class BlackJackApp extends StatelessWidget {
 }
 ```
 - Criar uma *splash screen* para iniciar o jogo em um arquivo `splash_screen.dart`
-```javascript
+```dart
 import 'package:flutter/material.dart';
 
 class BlackJackSplash extends StatelessWidget {
@@ -368,7 +368,7 @@ class BlackJackSplash extends StatelessWidget {
 }
 ```
 - Cria inicialmente a tela de cadastro do jogador em um arquivo `tela_cadastro.dart`
-```javascript
+```dart
 import 'package:flutter/material.dart';
 
 class TelaCadastro extends StatefulWidget {
@@ -397,7 +397,7 @@ class _TelaCadastroState extends State<TelaCadastro> {
 }
 ```
 - Criar inicialmente a tela da mesa do jogo em um arquivo `tela_mesa_jogo.dart`
-```javascript
+```dart
 import 'package:flutter/material.dart';
 
 class TelaMesaJogo extends StatefulWidget {
@@ -425,7 +425,7 @@ class _TelaMesaJogoState extends State<TelaMesaJogo> {
 }
 ```
 - Atualizar a `tela_principal.dart` com o código para fechamento automático da tela e direcionamento para a tela de cadastro
-```javascript
+```dart
 import 'package:flutter/material.dart';
 import 'package:simple_black_jack_local/splash_screen.dart';
 import 'package:simple_black_jack_local/tela_cadastro.dart';
@@ -458,7 +458,7 @@ class _TelaPrincipalState extends State<TelaPrincipal> {
 ```
 - Editar a tela de cadastro `tela_cadastro.dart` para que o jogador informe o seu nome utilizando um [TextField](https://api.flutter.dev/flutter/material/TextField-class.html) e um [ElevatedButton](https://api.flutter.dev/flutter/material/ElevatedButton-class.html)
 - Para incluir espaços em branco entre os *widgets* pode-se utilizar o [SizedBox](https://api.flutter.dev/flutter/widgets/SizedBox-class.html)
-```javascript
+```dart
 import 'package:flutter/material.dart';
 
 class TelaCadastro extends StatefulWidget {
@@ -506,7 +506,7 @@ class _TelaCadastroState extends State<TelaCadastro> {
 }
 ```
 - Quando o *widget* `TelaCadastro` for instanciado ele deve receber um método de *callback* como parâmetro para que seja acionado quando o usuário clicar no botão **Iniciar Jogo**
-```javascript
+```dart
 class TelaCadastro extends StatefulWidget {
 
   Function? iniciarJogoOnClick;
@@ -518,7 +518,7 @@ class TelaCadastro extends StatefulWidget {
 }
 ```
 - Alterar também a função `build` para incluir no `onPressed` a chamada para o *callback* passando o nome do jogador como parâmetro
-```javascript
+```dart
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -544,7 +544,7 @@ class TelaCadastro extends StatefulWidget {
   }
 ```
 - A mesma coisa deve ocorrer com a `BlackJackSplash`
-```javascript
+```dart
 import 'package:flutter/material.dart';
 
 class BlackJackSplash extends StatelessWidget {
@@ -574,7 +574,7 @@ class BlackJackSplash extends StatelessWidget {
 }
 ```
 - Refatorar a `TelaPrincipal` para acionar as demais passando os métodos de *callback*
-```javascript
+```dart
 import 'package:flutter/material.dart';
 import 'package:simple_black_jack_local/splash_screen.dart';
 import 'package:simple_black_jack_local/tela_cadastro.dart';
@@ -627,7 +627,7 @@ class _TelaPrincipalState extends State<TelaPrincipal> {
 }
 ```
 - Editar a tela `tela_mesa_jogo.dart` que exibe a mesa do jogo
-```javascript
+```dart
 import 'package:flutter/material.dart';
 import 'package:simple_black_jack/jogador.dart';
 
@@ -681,7 +681,7 @@ class _TelaMesaJogoState extends State<TelaMesaJogo> {
 }
 ```
 - Para facilitar a manutenção, criar uma classe para armazenar as *decorations* e aplicar, por exemplo, no `Container` que contém as cartas da mesa
-```javascript
+```dart
 import 'package:flutter/material.dart';
 
 class Decorations {
@@ -717,7 +717,7 @@ class Decorations {
 }
 ```
 - Por exemplo, para as cartas
-```javascript
+```dart
 Widget getCartas() {
   return Container(decoration: Decorations.getBoxDecoration(),
   child:Row(children: [Expanded(child: Image.asset("assets/verso-carta.png")),
@@ -729,7 +729,7 @@ Widget getCartas() {
 }
 ```
 - Código de inicialização para carregar a imagem das cartas dentro de `_TelaMesaJogoState`
-```javascript
+```dart
 
   // variaveis
   var imagemCarta;
@@ -760,7 +760,7 @@ Widget getCartas() {
 ```
 - Incluir um [CircularProgressIndicator](https://api.flutter.dev/flutter/material/CircularProgressIndicator-class.html) para exibir a tela somente quando a imagem das cartas for carregada
 - Criar uma caixa de texto para que o jogador possa realizar a aposta
-```javascript
+```dart
   Widget getAposta() {
     return Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -791,35 +791,10 @@ Widget getCartas() {
         ]);
   }
 ```
-- Utilizar *shared preferences* para armzenanar o nome de usuário incluindo a dependência
-```yml
-dependencies:
-  flutter:
-    sdk: flutter
-  shared_preferences: ^2.0.15
-```
-- Implementar o armazenamento
-```javascript
-import 'package:shared_preferences/shared_preferences.dart';
-
-// le o nome arazenado
-Future<void> _loadName() async {
-  SharedPreferences.setMockInitialValues({});
-  final prefs = await SharedPreferences.getInstance();
-  _savedName = prefs.getString('userName') ?? 'Nenhum nome salvo';
-
-}
-
-// grava / atualiza o nome
-Future<void> _saveName() async {
-  final prefs = await SharedPreferences.getInstance();
-  await prefs.setString('userName', _nameController.text);
-}
-```
 #### Trabalhando com JSON
 - Utilizar o pacote convert (`dart:convert`) para interpretar a sintaxe JSON com a função `json.decode`
 - Objeto simples
-```javascript
+```dart
 import 'dart:convert';
 
 var jsonMap = '{"id":"123"}'; //Objeto JSON simples
@@ -827,7 +802,7 @@ Map<String, dynamic> mapa = json.decode(jsonMap);
 print(json.decode(mapa['id']));
 ```
 - Objeto do tipo `array`
-```javascript
+```dart
 var jsonList = '[{"id":"123"}, {"id":"456"}]'; //Objeto JSON Array
 List<dynamic> lista = json.decode(jsonList);
 lista.forEach((element) {
@@ -835,7 +810,7 @@ lista.forEach((element) {
 });
 ```
 - Objeto complexo
-```javascript
+```dart
 // Array com Array
 var jsonComplexo = '[{"id":"123", "itens":["A","B"]}, '{"id":"456", "itens":["C","D"]}]';
 List<dynamic> listaComplexo = json.decode(jsonComplexo);
@@ -848,7 +823,7 @@ listaComplexo.forEach((element) {
 - Tais requisições podem ser utilizadas para interagir com serviços publicados na Internet (nuvem) utilizando o padrão *RESTFul*
 - A classe [Uri](https://api.flutter.dev/flutter/dart-core/Uri-class.html) possui uma série de funções interessantes para criar *URLs* padronizadas e faz parte do pacote *core* do **Flutter**
 - Exemplo de uma requisição *GET*
-```javascript
+```dart
 import 'package:http/http.dart' as http;
 
 final url = Uri.https('simple-black-jack.glitch.me', 'pontos');
@@ -861,7 +836,7 @@ http.get(uri,
 });
 ```
 - Exemplo de uma requisição *POST*
-```javascript
+```dart
 final url = Uri.https('simple-black-jack.glitch.me', 'novo');
 final Map<String, String> header = {'Content-Type' : 'application/json',
                                     'Accept' : 'application/json'};
@@ -874,7 +849,7 @@ http.post(url, headers: header, body: body).then((resp) {
 });
 ```
 - Funções úteis para manipulação de imagens
-```javascript
+```dart
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image/image.dart' as img;
@@ -916,3 +891,96 @@ int getImgY(int pos) {
 
 }
 ```
+***
+### Persistência com SQLite
+- Adicionar as dependências no `pubspec.yaml`
+```yml
+sqflite:
+path:
+```
+- Criar uma classe para representar os dados que serão persistidos
+```dart
+class JogadorDB {
+
+    String username;
+    
+    JogadorDB({this.username = ''});
+    
+    Map<String, dynamic> toMap() {
+    
+      return {'username': username};
+    
+    }
+}
+```
+- Criar uma classe para encapsular as operações de banco de dados
+```dart
+import 'package:sqflite/sqflite.dart';
+class DB {
+
+}
+```
+- Função para iniciar o banco de dados
+```dart
+static Future<Database> abrir() async {
+
+  Database db =  await openDatabase("SimpleBlackJackDB", onCreate: (db, version){
+        db.execute("CREATE TABLE TAB_JOGADOR (ID INTEGER PRIMARY KEY, USERNAME TEXT)");
+      }, version: 1);
+
+  return db;
+
+}
+```
+- Função para inserir um jogador
+```dart
+static Future<int> inserir(Database db, JogadorDB jogador) async {
+
+  var id = await db.insert('TAB_JOGADOR', jogador.toMap());
+  return id;
+
+}
+```
+- Função para listar
+```dart
+static Future<List<Map>> listar(Database db, String username) async {
+
+  return db.query('TAB_JOGADOR', where: "USERNAME = ?", whereArgs: [username]);
+
+}
+```
+- Alterar a classe `TelaPrincipal` cadastrar o jogador
+```dart
+DB.abrir().then((db){
+    DB.listar(db, nome).then((resultado){
+      if (resultado.isEmpty) {
+        DB.inserir(db, JogadorDB(username: nome)).then((id){
+          print('Jogador inserido: $id');
+        });
+      } else {
+        nome = resultado.single['USERNAME'];
+        print('Jogador banco de dados: $nome');
+      }
+      exibirTelaMesa(nome: nome);
+    });
+});
+```
+- Alterar a classe `TelaPrincipal` para verificar após o *splash* se o jogador ja existe
+```dart
+DB.abrir().then((db){
+    DB.listar(db, nome).then((resultado){
+      if (resultado.isEmpty) {
+        exibirTelaCadastro();
+      } else {
+        nome = resultado.single['USERNAME'];
+        print('Jogador banco de dados: $nome');
+        exibirTelaMesa(nome: nome);
+      }
+
+    });
+});
+```
+
+
+
+
