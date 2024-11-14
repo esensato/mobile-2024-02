@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:simple_black_jack/jogador.dart';
@@ -27,6 +28,8 @@ class _TelaMesaJogoState extends State<TelaMesaJogo> {
   // indica se a imagem das cartas ja foi carregada (assincrono)
   var _esperar = true;
 
+  var cartaAtualJogadorIdx = 0;
+
   // executado somente uma vez na inicialização do State
   @override
   void initState() {
@@ -42,7 +45,6 @@ class _TelaMesaJogoState extends State<TelaMesaJogo> {
       setState(() {
         // imagens ja carregadas, pode exibir as cartas
         _esperar = false;
-        _cartasJogador[0] = getCarta(12, _imagemCarta!);
       });
     });
   }
@@ -78,9 +80,9 @@ class _TelaMesaJogoState extends State<TelaMesaJogo> {
   Widget getBotoes() {
     return Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [ElevatedButton(style: Styles.getButtonStyle(), onPressed: (){}, child: const Text('Apostar')),
-      ElevatedButton(style: Styles.getButtonStyle(), onPressed: (){}, child: const Text('Comprar')),
+      ElevatedButton(style: Styles.getButtonStyle(), onPressed: comprar, child: const Text('Comprar')),
       ElevatedButton(style: Styles.getButtonStyle(), onPressed: (){}, child: const Text('Passar')),
-      ElevatedButton(style: Styles.getButtonStyle(), onPressed: (){}, child: const Text('Fim'))]);
+      ElevatedButton(style: Styles.getButtonStyle(), onPressed: fim, child: const Text('Fim'))]);
   }
 
   @override
@@ -96,6 +98,26 @@ class _TelaMesaJogoState extends State<TelaMesaJogo> {
         ]),
       ),
     );
+  }
+
+  void comprar() {
+    if (cartaAtualJogadorIdx < _cartasJogador.length) {
+
+      setState(() {
+        final int idCarta = Random().nextInt(totalCartaColuna * totalCartaLinha);
+        _cartasJogador[cartaAtualJogadorIdx] = getCarta(idCarta, _imagemCarta!);
+      });
+      cartaAtualJogadorIdx++;
+
+    }
+  }
+
+  void fim() {
+    cartaAtualJogadorIdx = 0;
+    setState(() {
+      _cartasJogador = [_versoCarta, _versoCarta, _versoCarta, _versoCarta];
+    });
+
   }
 
 }

@@ -1,5 +1,6 @@
 ## Android Nativo
 - [Developer Android](https://developer.android.com/?hl=pt-br)
+- Selecionar como modelo o **Empty Views Activity** e a linguagem **Java**
 - Classe principal deve especializar `AppCompatActivity`
 ```java
 public class MainActivity extends AppCompatActivity {
@@ -337,4 +338,61 @@ public void onChuteChanged(SeekBar seekBar, int progress, boolean fromUser) {
 ```java
 binding.setClickHandler(this);
 binding.setProgressChange(this);
-``
+```
+### Jetpack Compose
+```java
+class MainActivity : ComponentActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+        setContent {
+            SortearNumeros();
+        }
+    }
+}
+
+@Composable
+fun SortearNumeros() {
+
+    var n1 by remember { mutableIntStateOf(0) }
+    var n2 by remember { mutableIntStateOf(0) }
+    var resultado by remember { mutableStateOf("") }
+
+    Column (
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Cyan),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center) {
+
+        Text(
+            text = "Adivinhe...")
+        Spacer(modifier = Modifier.height(10.dp))
+        Text(
+            text = "Quanto é $n1 x $n2?"
+        )
+        Button(onClick = {
+            n1 = Random.nextInt(1, 10)
+            n2 = Random.nextInt(1, 10)
+        }) {
+            Text("Sortear")
+        }
+        TextField(
+            value = resultado,
+            onValueChange = { resultado = it },
+            label = { Text("Informe o resultado") }
+        )
+
+    }
+
+}
+
+@Preview
+@Composable
+fun PreviewSortearNumeros() {
+    TabuadaJetpackTheme {
+        SortearNumeros();
+    }
+}
+```
